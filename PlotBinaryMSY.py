@@ -17,7 +17,7 @@ def main():
 	data = np.array(data, dtype=float)
 
 	plot = plt.imshow(data)
-	plt.pcolor(data, vmin=0, vmax=0.18)
+	plt.pcolor(data, vmin=0, vmax=1)
 	plt.xlim([x_min, (x_max-x_min)/increment])
 	plt.ylim([y_min, (y_max-y_min)/increment])
 	plt.yticks( (0, 10, 20, 30, 40, 50), (0, 1, 2, 3, 4, 5) )

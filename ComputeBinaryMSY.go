@@ -4,7 +4,7 @@ import (
 	"math"
 	"fmt"
 
-	"Berlin/goent/discrete"
+	"github.com/keyan/goent/discrete"
 
     "log"
     "os"
@@ -16,8 +16,9 @@ func alpha(w2 float64, w1 float64, a1 float64, phi float64, psi float64, chi flo
 	nom := math.Exp(phi*w2*w1 + psi*w2*a1 + chi*w2*w1*a1)
 
 	denom := 0.0
+	RandVarValue := [2]float64{-1, 1}
 	for w3 := 0; w3 < 2; w3++ {
-		denom += math.Exp(phi*float64(w3)*w1 + psi*float64(w3)*a1 + chi*float64(w3)*w1*a1)
+		denom += math.Exp(phi*RandVarValue[w3]*w1 + psi*RandVarValue[w3]*a1 + chi*RandVarValue[w3]*w1*a1)
 	}
 
 	return nom / denom
@@ -27,8 +28,9 @@ func beta(s1 float64, w1 float64, zeta float64) float64{
 	nom := math.Exp(zeta*s1*w1)
 
 	denom := 0.0
+	RandVarValue := [2]float64{-1, 1}
 	for s3 := 0; s3 < 2; s3++ {
-		denom += math.Exp(zeta*float64(s3)*w1)
+		denom += math.Exp(zeta*RandVarValue[s3]*w1)
 	}
 
 	return nom / denom
@@ -38,8 +40,9 @@ func pi(a1 float64, s1 float64, mu float64) float64{
 	nom := math.Exp(mu*a1*s1)
 
 	denom := 0.0
+	RandVarValue := [2]float64{-1, 1}
 	for a2 := 0; a2 < 2; a2++ {
-		denom += math.Exp(mu*float64(a2)*s1)
+		denom += math.Exp(mu*RandVarValue[a2]*s1)
 	}
 
 	return nom / denom
@@ -49,8 +52,9 @@ func ro(w1 float64, tau float64) float64{
 	nom := math.Exp(tau*w1)
 
 	denom := 0.0
+	RandVarValue := [2]float64{-1, 1}
 	for w2 := 0; w2 < 2; w2++ {
-		denom += math.Exp(tau*float64(w2))
+		denom += math.Exp(tau*RandVarValue[w2])
 	}
 
 	return nom / denom
@@ -73,22 +77,22 @@ func normalise3D(p [][][]float64) [][][]float64 {
 			}
 		}
 	}
-	// fmt.Println(p)
 	return p
 }
 
 func MorphologicalComputationSYBinary(phi float64, psi float64, chi float64, zeta float64, mu float64, tau float64) float64{
 	iterations := 100
 	pw2w1a1 := discrete.Create3D(2, 2, 2)
+	RandVarValue := [2]float64{-1, 1}
 	for w2 := 0; w2 < 2; w2+=1 {
 		for w1 := 0; w1 < 2; w1+=1 {
 			for a1 := 0; a1 < 2; a1+=1 {
 				pw2w1a1[w2][w1][a1] = 0
 				for s1 := 0; s1 < 2; s1+=1 {
-					pw2w1a1[w2][w1][a1] += alpha(float64(w2), float64(w1), float64(a1), phi, psi, chi) * 
-											beta(float64(s1), float64(w1), zeta) * 
-											pi(float64(a1), float64(s1), mu) * 
-											ro(float64(w1), tau)
+					pw2w1a1[w2][w1][a1] += alpha(RandVarValue[w2], RandVarValue[w1], RandVarValue[a1], phi, psi, chi) * 
+											beta(RandVarValue[s1], RandVarValue[w1], zeta) * 
+											pi(RandVarValue[a1], RandVarValue[s1], mu) * 
+											ro(RandVarValue[w1], tau)
 				}
 			}
 		}
